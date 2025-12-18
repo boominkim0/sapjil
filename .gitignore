@@ -1,3 +1,6 @@
+# Ignore backup files
 .backup
 
+# Ignore build artifacts
+/html
 game

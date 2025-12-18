@@ -23,16 +23,14 @@
 ### macOS (네이티브 빌드)
 
 ```bash
-clang++ main.cpp core/Game.cpp core/Scene.cpp core/GameObject.cpp core/Container.cpp core/Image.cpp core/Text.cpp core/Rectangle.cpp core/Circle.cpp core/Line.cpp core/Polygon.cpp core/Path.cpp examples/bouncingBall/BouncingBallGame.cpp examples/bouncingBall/BouncingBallScene.cpp -o game -I. -I/opt/homebrew/include -L/opt/homebrew/lib \
--framework CoreVideo -framework IOKit -framework Cocoa \
--framework GLUT -framework OpenGL -lraylib
+clang++ main.cpp core/*.cpp examples/testGameObjects/*.cpp -o game -I. -I/opt/homebrew/include -L/opt/homebrew/lib -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -framework OpenGL -lraylib
 ```
 
 ### 웹 빌드 (Emscripten)
 
 ```bash
-emcc main.cpp core/Game.cpp core/Scene.cpp core/GameObject.cpp core/Container.cpp core/Image.cpp core/Text.cpp core/Rectangle.cpp core/Circle.cpp core/Line.cpp core/Polygon.cpp core/Path.cpp examples/bouncingBall/BouncingBallGame.cpp examples/bouncingBall/BouncingBallScene.cpp -o index.html -I. -Iraylib/src -Lraylib/build/raylib \
--lraylib -s USE_GLFW=3 -s ASYNCIFY
+mkdir -p html && emcc main.cpp core/*.cpp examples/testGameObjects/*.cpp -o html/index.html -I. -Iraylib/src -Lraylib/build/raylib \
+-lraylib -s USE_GLFW=3 -s ASYNCIFY --preload-file logo.png
 ```
 
 ### 실행
