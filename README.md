@@ -23,7 +23,7 @@
 ### macOS (네이티브 빌드)
 
 ```bash
-clang++ main.cpp -o game -I/opt/homebrew/include -L/opt/homebrew/lib \
+clang++ main.cpp core/Game.cpp core/Scene.cpp core/GameObject.cpp core/Container.cpp core/Image.cpp core/Text.cpp core/Rectangle.cpp core/Circle.cpp core/Line.cpp core/Polygon.cpp core/Path.cpp examples/bouncingBall/BouncingBallGame.cpp examples/bouncingBall/BouncingBallScene.cpp -o game -I. -I/opt/homebrew/include -L/opt/homebrew/lib \
 -framework CoreVideo -framework IOKit -framework Cocoa \
 -framework GLUT -framework OpenGL -lraylib
 ```
@@ -31,7 +31,7 @@ clang++ main.cpp -o game -I/opt/homebrew/include -L/opt/homebrew/lib \
 ### 웹 빌드 (Emscripten)
 
 ```bash
-emcc main.cpp -o index.html -Iraylib/src -Lraylib/build/raylib \
+emcc main.cpp core/Game.cpp core/Scene.cpp core/GameObject.cpp core/Container.cpp core/Image.cpp core/Text.cpp core/Rectangle.cpp core/Circle.cpp core/Line.cpp core/Polygon.cpp core/Path.cpp examples/bouncingBall/BouncingBallGame.cpp examples/bouncingBall/BouncingBallScene.cpp -o index.html -I. -Iraylib/src -Lraylib/build/raylib \
 -lraylib -s USE_GLFW=3 -s ASYNCIFY
 ```
 
