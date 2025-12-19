@@ -8,10 +8,10 @@
 
 **삽질(Sapjil)** 은 C++로 제작되는 **2D 게임 엔진 코어(Game Engine Core)** 입니다.  
 이 프로젝트는 [Phaser](https://phaser.io/)의 **Scene / Sprite / Update-Render 구조**를 참고하되,  
-모바일·데스크탑 환경에서 재사용 가능한 **그래픽 표현과 게임 연산에만 집중한 엔진**을 목표로 합니다.
+모바일·데스크탑·웹 환경에서 재사용 가능한 **그래픽 표현과 게임 연산에만 집중한 엔진**을 목표로 합니다.
 
 > ⚠️ 삽질은 **입력(Input), 네트워크(Network), 파일 IO, 플랫폼 API를 포함하지 않습니다.**  
-> 이 엔진은 **게임 세계의 계산과 GPU 렌더링**만을 담당합니다.
+> 이 엔진은 **게임 세계의 계산과 그리기 명령 생성**만을 담당합니다.
 
 ---
 
@@ -36,10 +36,10 @@
 - Sprite / Animation
 - Physics / Collision
 - Game Loop (update + render)
-- GPU 렌더링
+- Draw Command 생성
 ```
 
-이 구조는 **Flutter, Native, Web, Desktop** 등 어떤 플랫폼과도 결합 가능한 엔진 코어를 만드는 것을 목표로 합니다.
+이 구조는 **iOS, Android, macOS, Windows, HTML5** 등 어떤 플랫폼과도 결합 가능한 엔진 코어를 만드는 것을 목표로 합니다.
 
 ---
 
@@ -83,7 +83,7 @@ pixels
 ## 🛠️ 기술 스택
 
 - **언어**: C++
-- **그래픽 라이브러리**: [raylib](https://github.com/raysan5/raylib)
+- **그래픽 라이브러리**: [raylib](https://github.com/raysan5/raylib) (PC / Web 전용)
 - **참고 엔진**: Phaser 3
 
 > raylib은 플랫폼 윈도우 생성 및 기본 렌더링 백엔드로 사용되며,  
@@ -100,7 +100,7 @@ pixels
 - Animation / Tween
 - Physics / Collision (예정)
 - Game Loop (update / render)
-- GPU 기반 렌더링
+- Draw Command 생성
 
 ### ❌ 제공하지 않음
 
@@ -109,7 +109,7 @@ pixels
 - 파일 IO / Asset 다운로드
 - 플랫폼 API
 
-> 위 기능들은 **엔진 외부(Flutter, Native, Web 등)** 에서 처리한 뒤  
+> 위 기능들은 **엔진 외부(iOS, Android, Web 등)** 에서 처리한 뒤  
 > **데이터와 이벤트 형태로 삽질 엔진에 전달**하는 구조를 전제로 합니다.
 
 ---
@@ -266,3 +266,11 @@ TBD
 > "삽질 없이는 아무것도 이룰 수 없다"  
 > — Sapjil Project Motto
 
+## AI 사용 안내
+
+이 프로젝트는 **AI 기반 개발을 위한 엄격한 제약 조건**을 포함하고 있습니다.
+
+Copilot, Cursor, ChatGPT 등 어떤 AI 도구를 사용하든  
+작업을 시작하기 전에 반드시 아래 문서를 읽고 그 규칙을 따라야 합니다.
+
+👉 [AI_ENGINE_CONSTRAINTS.md](AI_ENGINE_CONSTRAINTS.md)
