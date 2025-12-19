@@ -2,5 +2,6 @@
 .backup
 
 # Ignore build artifacts
-/html
+/build
+/raylib
 game

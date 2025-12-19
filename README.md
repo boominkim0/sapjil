@@ -114,33 +114,133 @@ pixels
 
 ---
 
+## 🧩 의존성(중요)
+
+이 프로젝트는 **raylib을 레포에 포함하지 않습니다.**  
+대신 **각자 환경에 설치된 raylib 라이브러리**를 링크해서 빌드합니다.
+
+- ✅ 레포에 `raylib/` 폴더가 없어도 빌드 가능 (시스템에 raylib이 설치되어 있다면)
+- ❌ raylib “없이” 동작하는 것은 아님 (실행 파일은 raylib에 의존)
+
+> 참고: `otool -L ./game`(macOS) / `ldd ./game`(Linux)로 raylib 링크 여부를 확인할 수 있습니다.
+
+---
+
 ## 🚀 빌드 방법
 
-### macOS (네이티브 빌드)
+아래 커맨드들은 **예시**이며, 환경에 따라 include/lib 경로가 다를 수 있습니다.  
+가장 쉬운 방법은 **패키지 매니저로 raylib을 설치**하는 것입니다.
 
+### 1) raylib 설치
+
+#### macOS (Homebrew)
+```bash
+brew install raylib
+```
+
+#### Linux
+- Arch:
+```bash
+sudo pacman -S raylib
+```
+
+- Ubuntu/Debian 계열: 배포판에 `raylib` 패키지가 없을 수 있어, 이 경우 raylib을 소스에서 설치하거나(vcpkg/빌드) 아래 “CMake 사용” 방식으로 전환하는 것을 권장합니다.
+
+#### Windows
+- 권장: **vcpkg**로 설치
+```powershell
+vcpkg install raylib
+```
+
+---
+
+### 2) 네이티브 빌드 (clang++ 예시)
+
+#### macOS (Homebrew 경로 기준)
 ```bash
 clang++ main.cpp core/*.cpp examples/testGameObjects/*.cpp -o game \
 -I. -I/opt/homebrew/include \
 -L/opt/homebrew/lib \
 -framework CoreVideo -framework IOKit -framework Cocoa \
--framework GLUT -framework OpenGL -lraylib
+-framework OpenGL -lraylib
 ```
 
-### 웹 빌드 (Emscripten)
+> Intel Mac(Homebrew가 /usr/local 인 경우): `-I/usr/local/include -L/usr/local/lib` 로 바꿔야 합니다.
 
+#### Linux (설치 경로가 표준(/usr)인 경우가 많음)
 ```bash
-mkdir -p build/html && emcc main.cpp core/*.cpp examples/testGameObjects/*.cpp \
--o build/html/index.html \
--I. -Iraylib/src -Lraylib/build/raylib \
--lraylib -s USE_GLFW=3 -s ASYNCIFY --preload-file logo.png
+clang++ main.cpp core/*.cpp examples/testGameObjects/*.cpp -o game \
+-I. \
+-lraylib -lm -ldl -lpthread
 ```
 
-### 실행
+> 배포판/설치 방식에 따라 추가 링크 옵션이 필요할 수 있습니다.
+
+---
+
+### 3) 웹 빌드 (Emscripten)
+
+⚠️ 웹 빌드는 **시스템에 설치된 raylib(Homebrew 등)** 을 쓰는 게 아니라,  
+**raylib 소스를 Emscripten으로 웹용(wasm)으로 직접 빌드한 정적 라이브러리(libraylib.a)** 를 링크해야 합니다.
+
+#### 3-1) raylib 소스 준비 (submodule 권장)
+```bash
+git submodule add https://github.com/raysan5/raylib external/raylib
+git submodule update --init --recursive
+```
+
+#### 3-2) raylib을 웹용으로 빌드 (libraylib.a 생성)
+```bash
+cd external/raylib/src
+emmake make clean
+emmake make PLATFORM=PLATFORM_WEB -B
+cd ../../../
+```
+
+생성 확인:
+```bash
+ls -la external/raylib/src/libraylib.web.a
+```
+
+#### 3-3) 프로젝트 웹 빌드
+```bash
+mkdir -p build/html
+
+emcc main.cpp core/*.cpp examples/testGameObjects/*.cpp \
+  -o build/html/index.html \
+  -I. -Iexternal/raylib/src \
+  external/raylib/src/libraylib.web.a \
+  -s USE_GLFW=3 -s ASYNCIFY \
+  --preload-file logo.png
+```
+
+---
+
+## ▶️ 실행
+
+### 네이티브(현재 README의 `clang++ -o game` 빌드 기준)
+
+- macOS / Linux:
 
 ```bash
 ./game
 ```
 
+- Windows (PowerShell):
+
+```powershell
+./game.exe
+```
+
+### 웹(Emscripten)
+
+웹 빌드 결과물은 실행 파일이 아니라 `build/html/index.html` 입니다.
+
+```bash
+python3 -m http.server --directory build/html 8000
+```
+
+그 다음 브라우저에서 `http://localhost:8000/` 를 열면 됩니다.
 ---
 
 ## 📋 현재 상태
