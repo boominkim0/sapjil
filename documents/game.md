@@ -1,7 +1,7 @@
 # Game 클래스 설계 문서
 
 ## 개요
-`Game` 클래스는 게임의 전체적인 시스템을 총괄하는 역할을 담당합니다. 이 클래스는 게임 실행에 필요한 다양한 설정값을 초기화하고, 여러 시스템(Scene, EngineAPI, Sound 등)을 관리합니다. 또한, API와의 통신을 위한 인터페이스를 제공하며, 게임의 핵심적인 동작을 제어합니다.
+`Game` 클래스는 게임의 전체적인 시스템을 총괄하는 역할을 담당합니다. 이 클래스는 게임 실행에 필요한 다양한 설정값을 초기화하고, 여러 시스템(Scene, Sound 등)을 관리합니다. 게임의 핵심적인 동작을 제어합니다.
 
 ---
 
@@ -19,11 +19,7 @@
 - Scene은 중복으로 존재할 수 있습니다.
 - Scene의 위치와 크기는 조정할 수 없으며, 이는 Scene 내부의 카메라를 통해 제어됩니다.
 
-### 3. API 통신
-- **onResponse**: API로부터 응답을 처리합니다.
-- **sendRequest**: API에 요청을 보냅니다.
-
-### 4. 게임 시스템 정의
+### 3. 게임 시스템 정의
 - 물리 엔진 사용 여부를 판단합니다.
 - 충돌 처리와 애니메이션은 각 Scene에서 관리됩니다.
 
@@ -58,11 +54,14 @@
 #### 3. `closeScene(sceneId)`
 - 지정된 Scene을 비활성화하고 종료합니다.
 
-#### 4. `onResponse(request)`
-- API로부터 응답을 처리합니다.
+#### 4. `pause()`
+- 게임을 일시 정지합니다.
 
-#### 5. `sendRequest(response)`
-- API에 요청을 보냅니다.
+#### 5. `resume()`
+- 일시 정지된 게임을 다시 시작합니다.
+
+#### 6. `getFrame()`
+- 현재 프레임 번호를 반환합니다.
 
 ---
 
@@ -82,6 +81,18 @@ int main() {
     while (true) {
         float deltaTime = calculateDeltaTime();
         // 게임 시스템 업데이트 및 렌더링은 각 Scene에서 처리
+
+        // 현재 프레임 번호 출력
+        int currentFrame = game.getFrame();
+        std::cout << "Current Frame: " << currentFrame << std::endl;
+
+        // 예제: 게임 일시 정지 및 재개
+        if (shouldPause()) {
+            game.pause();
+        }
+        if (shouldResume()) {
+            game.resume();
+        }
     }
 
     // Scene 닫기
